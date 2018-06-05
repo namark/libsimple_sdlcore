@@ -11,7 +11,7 @@ namespace simple::sdlcore
 		nothing = 0,
 		video = SDL_INIT_VIDEO,
 		audio = SDL_INIT_AUDIO,
-		input = SDL_INIT_EVENTS,
+		event = SDL_INIT_EVENTS,
 		haptic = SDL_INIT_HAPTIC,
 		joystick = SDL_INIT_JOYSTICK,
 		game_controller = SDL_INIT_GAMECONTROLLER,
