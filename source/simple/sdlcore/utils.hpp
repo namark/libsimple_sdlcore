@@ -32,13 +32,14 @@ namespace simple::sdlcore::utils
 			throw std::runtime_error("SDL_ERROR: "s + SDL_GetError());
 	}
 
-	template <typename SDL_Object>
+	template <typename SDL_Object> // TODO: specify deleter type here and properly wrap unique_ptr
 	class object_wrapper
 	{
 
 		public:
-		bool operator==(const object_wrapper& other) { return _guts == other._guts; }
-		bool operator!=(const object_wrapper& other) { return !(*this == other); }
+		bool operator==(const object_wrapper& other) const noexcept { return _guts == other._guts; }
+		bool operator!=(const object_wrapper& other) const noexcept { return !(*this == other); }
+
 
 		protected:
 		using Deleter = void(*)(SDL_Object*);
