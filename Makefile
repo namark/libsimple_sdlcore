@@ -1,7 +1,7 @@
 override	CPPFLAGS	+= --std=c++1z
 override	CPPFLAGS	+= -MMD -MP
 override	CPPFLAGS	+= -I./include
-override	CPPFLAGS	+= $(shell cat .cxxflags | xargs)
+override	CPPFLAGS	+= $(shell cat .cxxflags 2> /dev/null | xargs)
 
 ARFLAGS	:= $(ARFLAGS)c
 
@@ -47,9 +47,10 @@ distclean: clean
 	@rmdir $(DISTDIR) 2> /dev/null || true
 	@echo All clean!
 
-install: $(OUT) $(INCLUDE) | $(LIBDIR)
-	cp $(OUT) $(LIBDIR)/$(TARGET)
-	@echo Install complete!
+install: $(LIBDIR)/$(TARGET) $(INCLUDE)
+
+$(LIBDIR)/$(TARGET): $(OUT) | $(LIBDIR)
+	cp $< $@
 
 $(LIBDIR):
 	@mkdir $@
@@ -72,4 +73,4 @@ uninstall:
 -include $(DEPENDS)
 
 .PRECIOUS : $(OBJECTS)
-.PHONY : clean distclean install uninstall
+.PHONY : clean distclean uninstall
