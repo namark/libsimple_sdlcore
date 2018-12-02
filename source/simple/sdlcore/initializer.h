@@ -27,6 +27,8 @@ namespace simple::sdlcore
 	class initializer
 	{
 		public:
+		static bool exists(system_flag) noexcept;
+
 		initializer(system_flag = system_flag::everything);
 		virtual ~initializer() noexcept;
 
