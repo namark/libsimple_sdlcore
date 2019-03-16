@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <utility>
+#include <cassert>
 #include <SDL2/SDL.h>
 
 #include "simple/support/range.hpp"
@@ -58,6 +59,7 @@ namespace simple::sdlcore::utils
 
 		const object_ptr& guts() const
 		{
+			assert(_guts && "simple::sdlcore::object_wrapper must not be null");
 			return _guts;
 		}
 
