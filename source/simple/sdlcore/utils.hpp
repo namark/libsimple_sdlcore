@@ -17,7 +17,7 @@ namespace simple::sdlcore::utils
 	template <typename Type>
 	inline bool check_error(Type&& pointer)
 	{
-		return (NULL == pointer);
+		return (nullptr == pointer);
 	}
 
 	inline bool check_error(int error_code)
@@ -33,7 +33,7 @@ namespace simple::sdlcore::utils
 			throw std::runtime_error("SDL_ERROR: "s + SDL_GetError());
 	}
 
-	template <typename SDL_Object> // TODO: specify deleter type here and properly wrap unique_ptr
+	template <typename SDL_Object, typename DeleterType = void(*)(SDL_Object*)>
 	class object_wrapper
 	{
 
@@ -43,15 +43,22 @@ namespace simple::sdlcore::utils
 
 
 		protected:
-		using Deleter = void(*)(SDL_Object*);
+		using Deleter = DeleterType;
 		using object_ptr = std::unique_ptr<SDL_Object, Deleter>;
+		using pointer = typename object_ptr::pointer;
 
 		private:
 		object_ptr _guts;
 
 		protected:
 
-		object_wrapper(SDL_Object* guts, Deleter deleter)
+		object_wrapper(pointer guts)
+			: _guts(guts)
+		{
+			throw_error(_guts.get());
+		}
+
+		object_wrapper(pointer guts, Deleter deleter)
 			: _guts(guts, deleter)
 		{
 			throw_error(_guts.get());
@@ -59,7 +66,7 @@ namespace simple::sdlcore::utils
 
 		const object_ptr& guts() const
 		{
-			assert(_guts && "simple::sdlcore::object_wrapper must not be null");
+			assert((nullptr != _guts) && "simple::sdlcore::object_wrapper must not be null");
 			return _guts;
 		}
 
