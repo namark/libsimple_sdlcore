@@ -25,6 +25,11 @@ namespace simple::sdlcore::utils
 		return 0 != error_code;
 	}
 
+	inline bool check_error(bool error)
+	{
+		return error;
+	}
+
 	template <typename Type>
 	inline void throw_error(Type&& error)
 	{
